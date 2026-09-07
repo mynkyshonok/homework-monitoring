@@ -77,6 +77,9 @@ CPU, RAM, inodes, free disk space - для мониторинга базовых
 
 P.S.: если при запуске некоторые контейнеры будут падать с ошибкой - проставьте им режим `Z`, например
 `./data:/var/lib:Z`
+
+<img width="1860" height="936" alt="image" src="https://github.com/user-attachments/assets/6cebfa7e-3051-4ca1-ae37-05a8e27d6b5f" />
+
 #
 8. Перейдите в веб-интерфейс Chronograf (http://localhost:8888) и откройте вкладку Data explorer.
         
@@ -86,6 +89,10 @@ P.S.: если при запуске некоторые контейнеры б�
     - Вверху вы можете увидеть запрос, аналогичный SQL-синтаксису. Поэкспериментируйте с запросом, попробуйте изменить группировку и интервал наблюдений.
 
 Для выполнения задания приведите скриншот с отображением метрик утилизации cpu из веб-интерфейса.
+
+<img width="1844" height="467" alt="image" src="https://github.com/user-attachments/assets/8c7aab91-867a-4650-9b75-e70608e4c7fa" />
+
+
 #
 9. Изучите список [telegraf inputs](https://github.com/influxdata/telegraf/tree/master/plugins/inputs). 
 Добавьте в конфигурацию telegraf следующий плагин - [docker](https://github.com/influxdata/telegraf/tree/master/plugins/inputs/docker):
@@ -115,6 +122,9 @@ P.S.: если при запуске некоторые контейнеры б�
 веб-интерфейсе базы telegraf.autogen . Там должны появиться метрики, связанные с docker.
 
 Факультативно можете изучить какие метрики собирает telegraf после выполнения данного задания.
+
+<img width="614" height="254" alt="image" src="https://github.com/user-attachments/assets/9ebb0a66-b418-4243-adf9-41bd33c1530c" />
+
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
 
