@@ -6,9 +6,9 @@ services:
       - node.name=es-hot
       - cluster.name=test-cluster
       - discovery.seed_hosts=es-warm
-      - cluster.initial_master_nodes=es-hot,es-warm
+      - cluster.initial_master_nodes=es-hot
       - node.attr.box_type=hot
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g -Dcluster.routing.allocation.disk.threshold_enabled=false"
       - xpack.security.enabled=false
     ports:
       - "9200:9200"
@@ -26,9 +26,9 @@ services:
       - node.name=es-warm
       - cluster.name=test-cluster
       - discovery.seed_hosts=es-hot
-      - cluster.initial_master_nodes=es-hot,es-warm
+      - node.roles=data,ingest
       - node.attr.box_type=warm
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g -Dcluster.routing.allocation.disk.threshold_enabled=false"
       - xpack.security.enabled=false
     depends_on:
       - es-hot
