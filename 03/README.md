@@ -31,7 +31,14 @@ Filebeat следует сконфигурировать для отправки
 <img width="1563" height="879" alt="image" src="https://github.com/user-attachments/assets/7d53119a-ecbf-4339-8657-898d5db7fcf0" />
 
 - docker-compose манифест (если вы не использовали директорию help);
+
+[docker-compose.yml](elk/docker-compose.yml)
+
 - ваши yml-конфигурации для стека (если вы не использовали директорию help).
+
+[filebeat.yml](elk/filebeat.yml)
+
+[logstash.conf](elk/logstash.conf)
 
 ## Задание 2
 
