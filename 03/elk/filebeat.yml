@@ -1,0 +1,20 @@
+filebeat.inputs:
+- type: filestream
+  id: docker-container-logs
+  paths:
+    - '/var/lib/docker/containers/*/*.log'
+  
+  parsers:
+    - container:
+        stream: all
+        format: auto
+
+  backoff.init: 5s
+  backoff.max: 20s
+  buffer_size: 16384
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  bulk_max_size: 50
+
+logging.level: error

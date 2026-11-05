@@ -1,0 +1,97 @@
+services:
+  es-hot:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.6
+    container_name: es-hot
+    environment:
+      - node.name=es-hot
+      - cluster.name=test-cluster
+      - discovery.seed_hosts=es-warm
+      - cluster.initial_master_nodes=es-hot,es-warm
+      - node.attr.box_type=hot
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
+    networks:
+      - elk-net
+
+  es-warm:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.6
+    container_name: es-warm
+    environment:
+      - node.name=es-warm
+      - cluster.name=test-cluster
+      - discovery.seed_hosts=es-hot
+      - cluster.initial_master_nodes=es-hot,es-warm
+      - node.attr.box_type=warm
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
+    depends_on:
+      - es-hot
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
+    networks:
+      - elk-net
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.5.6
+    container_name: logstash
+    environment:
+      - "LS_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    ports:
+      - "50000:50000"
+      - "5044:5044"
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
+    depends_on:
+      - es-hot
+    networks:
+      - elk-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.6
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es-hot:9200
+      - NODE_OPTIONS=--max-old-space-size=1536
+    depends_on:
+      - es-hot
+    deploy:
+      resources:
+        limits:
+          memory: 2000M
+    networks:
+      - elk-net
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.6
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - logstash
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+    networks:
+      - elk-net
+
+networks:
+  elk-net:
+    driver: bridge
